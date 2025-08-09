@@ -1,4 +1,3 @@
-const SITE_PREFIX = "http://127.0.0.1:5000";
 const STREET_UPDATE_MS = 3000;
 
 let simCars = (simLights = simHistogram = simTotals = true);
@@ -48,9 +47,9 @@ function paintOneStreet(street_type, alert_level) {
   if (alert_level == 0) {
     return;
   } else if (alert_level == 1) {
-    obj.src = `yellow_bg.png`;
+    obj.src = `https://raw.githubusercontent.com/AbrilPolanco/iotProjectMedia/main/media/yellow_bg.png`;
   } else {
-    obj.src = `red_bg.png`;
+    obj.src = `https://raw.githubusercontent.com/AbrilPolanco/iotProjectMedia/main/media/red_bg.png`;
   }
   obj.alt = `Street alert`;
   obj.classList.add("street_alert");
@@ -106,7 +105,7 @@ function createCar(laneIndex, posIndex) {
     variant = Math.floor(Math.random() * verticalVariants) + 1;
   }
 
-  car.src = `https://raw.githubusercontent.com/AbrilPolanco/iotProjectMedia/refs/heads/main/media/${folder}/auto${variant}.png`;
+  car.src = `https://raw.githubusercontent.com/AbrilPolanco/iotProjectMedia/main/media/${folder}/auto${variant}.png`;
   car.alt = `Car ${laneIndex}.${posIndex}`;
   car.classList.add("overlay");
 
