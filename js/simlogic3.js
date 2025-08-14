@@ -1,24 +1,11 @@
-const STREET_UPDATE_MS = 3000;
+let allSim = (simPredict = simHistogram = simTotals = true);
 
-console.log("Starting thingies stuff yes lol woahhh");
-
-let simCars = (simLights = simHistogram = simTotals = true);
-
-function toggleSimCars() {
-  simCars = !simCars;
-  const btn = document.getElementById("simCars");
-  btn.classList.remove("active-cars");
+function toggleAllSim() {
+  allSim = !allSim;
+  const btn = document.getElementById("simAll");
+  btn.classList.remove("active-sim");
   btn.classList.remove("btn-secondary");
-  if (simCars) btn.classList.add("active-cars");
-  else btn.classList.add("btn-secondary");
-}
-
-function toggleSimLights() {
-  simLights = !simLights;
-  const btn = document.getElementById("simLights");
-  btn.classList.remove("active-lights");
-  btn.classList.remove("btn-secondary");
-  if (simLights) btn.classList.add("active-lights");
+  if (allSim) btn.classList.add("active-sim");
   else btn.classList.add("btn-secondary");
 }
 
@@ -39,12 +26,20 @@ function toggleSimTotals() {
   if (simTotals) btn.classList.add("active-totals");
   else btn.classList.add("btn-secondary");
 }
+function toggleSimPredict() {
+  simPredict = !simPredict;
+  const btn = document.getElementById("simPredict");
+  btn.classList.remove("active-predict");
+  btn.classList.remove("btn-secondary");
+  if (simPredict) btn.classList.add("active-predict");
+  else btn.classList.add("btn-secondary");
+}
 
 // Global car reference array
 let carElements = [[], []]; // carElements[lane][position]
 
 function paintOneStreet(street_type, alert_level) {
-  console.log(`Painting street ${street_type} with level ${alert_level}`);
+  // console.log(`Painting street ${street_type} with level ${alert_level}`);
   const obj = document.createElement("img");
   if (alert_level == 0) {
     return;
@@ -80,11 +75,11 @@ function paintOneStreet(street_type, alert_level) {
   else H_ALERT = obj;
   setTimeout(() => {
     obj.remove();
-  }, STREET_UPDATE_MS - 10);
+  }, updateTimes.clearMap);
 }
 
 function paintStreets(cars_h, cars_v) {
-  console.log(`V: ${cars_v} | H: ${cars_h}`);
+  // console.log(`V: ${cars_v} | H: ${cars_h}`);
   paintOneStreet(0, cars_v >= 4 ? 2 : cars_v > 2 ? 1 : 0);
   paintOneStreet(1, cars_h >= 4 ? 2 : cars_h > 2 ? 1 : 0);
 }
@@ -93,7 +88,7 @@ function createCar(laneIndex, posIndex) {
   const car = document.createElement("img");
 
   // === Choose image based on lane ===
-  const horizontalVariants = 7; // change this if you have more
+  const horizontalVariants = 1; // change this if you have more
   const verticalVariants = 1;
 
   let folder = "";
@@ -140,11 +135,11 @@ function createCar(laneIndex, posIndex) {
       carElements[laneIndex][posIndex].remove();
       carElements[laneIndex][posIndex] = null;
     }
-  }, STREET_UPDATE_MS - 10);
+  }, updateTimes.clearMap);
 }
 
 function getCars() {
-  if (!simCars) return;
+  if (!allSim) return;
   fetch(SITE_PREFIX + "/get_traffic")
     .then((r) => r.text())
     .then((text_data) => {
@@ -180,13 +175,13 @@ function getCars() {
           }
         });
       });
-      paintStreets(carsv, carsh);
+      paintStreets(carsh, carsv);
     })
     .catch((err) => console.error("Fetch error for get_traffic:", err));
 }
 
 function getLights() {
-  if (!simLights) return;
+  if (!allSim) return;
   fetch(SITE_PREFIX + "/get_lights")
     .then((r) => r.text())
     .then((data) => {
@@ -200,6 +195,10 @@ function getLights() {
         .forEach((el) => (el.style.display = "none"));
       document.getElementById(`v${data[0]}`).style.display = "block";
       document.getElementById(`h${data[1]}`).style.display = "block";
+      setTimeout(() => {
+        document.getElementById(`v${data[0]}`).style.display = "none";
+        document.getElementById(`h${data[1]}`).style.display = "none";
+      }, updateTimes.clearMap);
     })
     .catch((err) => console.error("Fetch error for get_lights:", err));
 }
@@ -217,9 +216,12 @@ function getTotals() {
     .catch((err) => console.error("Fetch error for get_totals:", err));
 }
 
-getCars();
-getLights();
+function updateMap() {
+  getCars();
+  getLights();
+}
+
+updateMap();
 getTotals();
-setInterval(getCars, STREET_UPDATE_MS);
-setInterval(getLights, STREET_UPDATE_MS);
-setInterval(getTotals, STREET_UPDATE_MS);
+setInterval(updateMap, updateTimes.map);
+setInterval(getTotals, updateTimes.totals);

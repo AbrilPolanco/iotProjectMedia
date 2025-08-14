@@ -25,6 +25,7 @@ function linearRegression(data, key) {
 let P_CHART = null;
 
 function doPredict() {
+  if(!simPredict) return;
   fetch(SITE_PREFIX + "/get_whole_history")
     .then((r) => r.text())
     .then((d) => {
@@ -39,13 +40,13 @@ function doPredict() {
       let last_real = Number(
         d.trim().split("\n")[origData.length - 1].split(",")[0]
       );
-      console.log(`Next ${amnt_pred} predictions (A, B, C):`);
       for (let i = origData.length; i < origData.length + amnt_pred; i++) {
         newData += `${last_real + (i - origData.length) * 10},${predictA(
           i
         )},${predictB(i)},${predictC(i)}\n`;
       }
-      console.log(newData);
+      // console.log(`Next ${amnt_pred} predictions (A, B, C):`);
+      // console.log(newData);
 
       //   new chart
 
@@ -124,10 +125,6 @@ function doPredict() {
         options: {
           responsive: true,
           plugins: {
-            title: {
-              display: true,
-              text: "10-Minute Summed Line Graph",
-            },
           },
           scales: {
             x: {
@@ -135,7 +132,7 @@ function doPredict() {
             },
             y: {
               beginAtZero: true,
-              title: { display: true, text: "Suma de vehiculos" },
+              title: { display: true, text: "Suma de vehículos" },
             },
           },
         },
@@ -146,4 +143,4 @@ function doPredict() {
 doPredict();
 setInterval(() => {
   doPredict();
-}, STREET_UPDATE_MS);
+}, updateTimes.prediction);

@@ -83,10 +83,6 @@ function updateHistory() {
         options: {
           responsive: true,
           plugins: {
-            title: {
-              display: true,
-              text: "10-Minute Summed Line Graph",
-            },
           },
           scales: {
             x: {
@@ -94,7 +90,7 @@ function updateHistory() {
             },
             y: {
               beginAtZero: true,
-              title: { display: true, text: "Suma de vehiculos" },
+              title: { display: true, text: "Suma de vehículos" },
             },
           },
         },
@@ -104,4 +100,4 @@ function updateHistory() {
 updateHistory();
 setInterval(() => {
   updateHistory();
-}, STREET_UPDATE_MS);
+}, updateTimes.histogram);
