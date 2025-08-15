@@ -57,16 +57,16 @@ function paintOneStreet(street_type, alert_level) {
 
   if (street_type === 0) {
     // Horizontal lane
-    obj.style.top = "24%";
+    obj.style.top = "32%";
     obj.style.left = "0%";
-    obj.style.width = "48.5%";
-    obj.style.height = "16.5%";
+    obj.style.width = "48.4%";
+    obj.style.height = "11.75%";
   } else {
     // Vertical lane
-    obj.style.top = "42.5%";
+    obj.style.top = "45.1%";
     obj.style.left = "50.4%";
-    obj.style.width = "12.1%";
-    obj.style.height = "57.5%";
+    obj.style.width = "16%";
+    obj.style.height = "55.1%";
   }
 
   document.getElementById("street-container").appendChild(obj);
@@ -112,12 +112,12 @@ function createCar(laneIndex, posIndex) {
 
   if (laneIndex === 0) {
     // Horizontal lane
-    car.style.top = "25%";
+    car.style.top = "33.6%";
     car.style.left = 1 + posIndex * 10 + "%";
   } else {
     // Vertical lane
-    car.style.left = "51%";
-    car.style.top = 43 + posIndex * 15 + "%";
+    car.style.left = "53%";
+    car.style.top = 50 + posIndex * 10 + "%";
   }
 
   // === ID and data attributes ===
